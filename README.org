@@ -17,7 +17,7 @@ A small python script (meant for personal use) which checks for new articles in 
 2. Make a new file called =config.ini= in the same folder with the following content. Add your telegram bot token and chat ID. Whitelists can be separated by commas as shown below.
 
 #+begin_src conf config.ini
-  [DEFAULT	]
+  [DEFAULT]
   telegramBotToken = BOT TOKEN HERE
 
   [user1]
@@ -30,7 +30,7 @@ A small python script (meant for personal use) which checks for new articles in 
 #+end_src
 
 3. Run with =python RSS-notifier-server.py= or =python3 RSS-notifier-server.py=
-4. The first run will not send articles, only follow runs will compare the new articles to previously retrieved articles and send the new ones through Telegram.
+4. The first run will not send articles, only subsequent runs will compare the new articles to previously retrieved articles and send the new entries through Telegram to the users as defined in =config.ini=.
 
 ** Supported whitelists
 Currently only =uro= and =abdomen= whitelists are supported.
