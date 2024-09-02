@@ -1,0 +1,43 @@
+#+title: Radiology RSS notifier
+#+author: Cedric Vanmarcke
+#+date: 2024-08-21
+#+OPTIONS: toc:nil tags:nil todo:nil
+#+EXCLUDE_TAGS: noexport
+
+A small python script (meant for personal use) which checks for new articles in certain radiology journals, and sends the title and abstract through telegram when it contains certain keywords.
+
+* How to use
+** Requirements
+- Python 3
+- Feedparser: =pip install feedparser=
+- Html2text: =pip install html2text=
+
+** Setting up
+1. Download the python file.
+2. Make a new file called =config.ini= in the same folder with the following content. Add your telegram bot token and chat ID. Whitelists can be separated by commas as shown below.
+
+#+begin_src conf config.ini
+  [DEFAULT	]
+  telegramBotToken = BOT TOKEN HERE
+
+  [user1]
+  telegramChatID = CHAT ID HERE
+  whitelists = uro, abdomen
+
+  [user2]
+  telegramChatID = CHAT ID HERE
+  whitelists = uro
+#+end_src
+
+3. Run with =python RSS-notifier-server.py= or =python3 RSS-notifier-server.py=
+4. The first run will not send articles, only follow runs will compare the new articles to previously retrieved articles and send the new ones through Telegram.
+
+** Supported whitelists
+Currently only =uro= and =abdomen= whitelists are supported.
+
+** Monitored journals
+- Insights into imaging
+- Abdominal radiology
+- Radiographics
+- AJR
+- European radiology
