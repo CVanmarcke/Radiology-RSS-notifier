@@ -101,29 +101,21 @@ def message_passes_blacklist(message: str) -> bool:
 
 def format_entry_for_telegram(entry):
     components = {'title': format_title(entry['title']),
+                  'journal': entry['dc_source'],
                   'doi': entry['dc_identifier'][4:],
-                  'PMID': entry['id'][7:]}
-    content = html2text.html2text(entry['content'][0]['value'])
-    content = content.replace("**", "*") # fix
-    content = re.sub(r'([\w)-,])\n(\w)', #fix newlines
-                     r'\1 \2',
-                     content)
-    if (entry['dc_source'] == 'Insights into imaging' or
-        entry['dc_source'] == 'Abdominal radiology (New York)' or
-        entry['dc_source'] == 'European radiology'):
-        components['abstract'] = format_abdominalradiology(content)
-    elif (entry['dc_source'] == 'Radiographics : a review publication of the Radiological Society of North America, Inc' or
-          entry['dc_source'] == 'AJR Am J Roentgenol' or
-          entry['dc_source'] == 'AJR. American journal of roentgenology'):
-        components['abstract'] = format_AJR(content)
-    else:
-        components['abstract'] = content
+                  'PMID': entry['id'][7:],
+                  'abstract': format_content(entry['content'][0]['value'])}
     return '__[{}](https://doi.org/{})__'\
-        '\n{}\n'\
-        '[Open in QxMD](https://qxmd.com/r/{})'.format(components['title'],
-                                                       components['doi'],
-                                                       components['abstract'],
-                                                       components['PMID'])
+        '\n{}\n{}\n'\
+        '[Link](https://doi.org/{}) | '\
+        '[Pubmed](https://pubmed.ncbi.nlm.nih.gov/{}/) | '\
+        '[QxMD](https://qxmd.com/r/{})'.format(components['title'],
+                                               components['doi'],
+                                               components['journal'],
+                                               components['abstract'],
+                                               components['doi'],
+                                               components['PMID'],
+                                               components['PMID'])
 
 def format_title(title: str) -> str:
     title = html2text.html2text(title)
@@ -131,16 +123,17 @@ def format_title(title: str) -> str:
     title = re.sub(r'\n+$', '', title)
     return title.replace('\n', ' ')
 
-def format_abdominalradiology(content: str) -> str:
-    abstract = content[content.rfind('*ABSTRACT*')+11:content.rfind('\n\nPMID:')]
-    return abstract
-
-def format_AJR(content: str) -> str:
-    if content.rfind('*ABSTRACT*') != -1:
-        abstract = content[content.rfind('*ABSTRACT*')+11:content.rfind('\n\nPMID:')]
-    else:
-        abstract = 'No abstract'
-    return abstract
+def format_content(content: str) -> str:
+    content = html2text.html2text(content)
+    content = content.replace("**", "*") # fix
+    content = re.sub(r'([\w)-,])\n(\w)', #fix newlines
+                     r'\1 \2',
+                     content)
+    abstrStart = content.rfind('*ABSTRACT*\n')
+    PMIDStart = content.rfind('\n\nPMID:')
+    if (abstrStart != -1 and PMIDStart != -1):
+        content = content[abstrStart + 11 : PMIDStart]
+    return content
 
 def send_message_to_telegram(message, telegramChatID, format="Markdown", disable_web_preview=True):
     data = {
