@@ -41,13 +41,11 @@ def main(RSSlist = RSSlist):
         # Check if we already have downloaded it once
         feed = feedparser.parse(link)
         if link in lastUpdatedMetadata.keys():
-            # https://stackoverflow.com/questions/22211795/python-feedparser-how-can-i-check-for-new-rss-data
             if lastUpdatedMetadata[link]['last_published'] == feed.feed.published:
                 print('{} has not changed, don\'t push to phone'.format(lastUpdatedMetadata[link]['feed_title']))
             else:
                 print('{} has changed, looking for new entries:'.format(lastUpdatedMetadata[link]['feed_title']))
                 send_new_entries(feed, lastUpdatedMetadata[link]['last_entry_doi'])
-                # changed, get new entries
         else:
             print('New feed added: {}.'.format(feed['feed']['title']))
         feeds.append(feed)
@@ -105,8 +103,8 @@ def format_entry_for_telegram(entry):
                   'doi': entry['dc_identifier'][4:],
                   'PMID': entry['id'][7:],
                   'abstract': format_content(entry['content'][0]['value'])}
-    return '__[{}](https://doi.org/{})__'\
-        '\n{}\n{}\n'\
+    return '[{}](https://doi.org/{})'\
+        '\n_{}_\n\n{}\n'\
         '[Link](https://doi.org/{}) | '\
         '[Pubmed](https://pubmed.ncbi.nlm.nih.gov/{}/) | '\
         '[QxMD](https://qxmd.com/r/{})'.format(components['title'],
@@ -132,7 +130,9 @@ def format_content(content: str) -> str:
     abstrStart = content.rfind('*ABSTRACT*\n')
     PMIDStart = content.rfind('\n\nPMID:')
     if (abstrStart != -1 and PMIDStart != -1):
-        content = content[abstrStart + 11 : PMIDStart]
+        content = content[abstrStart + 12 : PMIDStart]
+    elif content.rfind('\n*NO ABSTRACT*\n') != -1:
+        content = 'No abstract.'
     return content
 
 def send_message_to_telegram(message, telegramChatID, format="Markdown", disable_web_preview=True):
@@ -142,11 +142,8 @@ def send_message_to_telegram(message, telegramChatID, format="Markdown", disable
         "parse_mode": format,
         "disable_web_page_preview": disable_web_preview,
     }
-    r = requests.post(get_url("sendMessage", telegramBotToken), data=data)
+    r = requests.post(f'https://api.telegram.org/bot{telegramBotToken}/sendMessage', data=data)
     print(f'Sent to telegram; respons {r}')
-
-def get_url(method, token):
-    return "https://api.telegram.org/bot{}/{}".format(token, method)
 
 def load_config(configfile = 'config.ini'):
     if not os.path.exists(configfile):
