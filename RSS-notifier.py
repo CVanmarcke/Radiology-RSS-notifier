@@ -27,7 +27,7 @@ whitelists_by_category = {'uro': ['urogenital' 'genitourina', 'urinary'
                                       'gastro', 'gastric', 'duoden', 'jejun', 'ileum', 'ileal',
                                       'colon', 'sigmoid', 'rectum', 'rectal', 'anus', ' anal ',
                                       'uterus', 'uterine', 'ovary', 'ovarian', 'adnex', 'cervix', 'vagina']}
-blacklist = ['Letter to the Editor']
+blacklist = ['Letter to the Editor', 'Erratum for: ']
 
 
 # Retrieves RSS list, and sends new ones to phone
