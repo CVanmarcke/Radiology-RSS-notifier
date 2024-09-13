@@ -133,6 +133,15 @@ def format_content(content: str) -> str:
         content = content[abstrStart + 12 : PMIDStart]
     elif content.rfind('\n*NO ABSTRACT*\n') != -1:
         content = 'No abstract.'
+    # removes too many newlines in certain places
+    # for longword\n(LW)
+    content = re.sub(r'(\w)\n(\(\w)', r'\1 \2', content)
+    # for wordwith-\nhyphen
+    content = re.sub(r'(\w-)\n(\w)', r'\1\2', content)
+    # for "95% CI:\n0.623"
+    content = re.sub(r'([^.] [A-Z ]+:)\n(\w)', r'\1 \2', content)
+    # If eg "KEY POINTS:"  occurs in the middle of the text, add some new lines before it
+    content = re.sub(r'\. ([A-Z ]{7,}: )', r'.\n\n\1', content)
     return content
 
 def send_message_to_telegram(message, telegramChatID, format="Markdown", disable_web_preview=True):
