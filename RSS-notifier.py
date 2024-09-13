@@ -124,22 +124,17 @@ def format_title(title: str) -> str:
 def format_content(content: str) -> str:
     content = html2text.html2text(content)
     content = content.replace("**", "*") # fix
-    content = re.sub(r'([\w)-,])\n(\w)', #fix newlines
+    content = re.sub(r'(\w[),:\w])\n(\(?\w)', #fix newlines
                      r'\1 \2',
                      content)
+    # removes too many newlines in certain places when wordwith-\nhyphen
+    content = re.sub(r'(\w-)\n(\w)', r'\1\2', content)
     abstrStart = content.rfind('*ABSTRACT*\n')
     PMIDStart = content.rfind('\n\nPMID:')
     if (abstrStart != -1 and PMIDStart != -1):
         content = content[abstrStart + 12 : PMIDStart]
     elif content.rfind('\n*NO ABSTRACT*\n') != -1:
         content = 'No abstract.'
-    # removes too many newlines in certain places
-    # for longword\n(LW)
-    content = re.sub(r'(\w)\n(\(\w)', r'\1 \2', content)
-    # for wordwith-\nhyphen
-    content = re.sub(r'(\w-)\n(\w)', r'\1\2', content)
-    # for "95% CI:\n0.623"
-    content = re.sub(r'([^.] [A-Z ]+:)\n(\w)', r'\1 \2', content)
     # If eg "KEY POINTS:"  occurs in the middle of the text, add some new lines before it
     content = re.sub(r'\. ([A-Z ]{7,}: )', r'.\n\n\1', content)
     return content
