@@ -22,11 +22,11 @@ whitelists_by_category = {'uro': ['urogenital' 'genitourina', 'urinary'
                                   'prostat', 'seminal', 'penis', 'testic', 'scrotum', 'scrotal'],
                           'abdomen': ['abdomen', 'abdominal',
                                       'peritoneum', 'peritoneal', 'perineal', 'perineum',
-                                      ' liver', 'hepatic', 'hepato', 'biliar', 'gallbladder',
+                                      ' liver', 'hepatic', 'hepato', 'HCC', 'biliar', 'gallbladder',
                                       'pancrea', 'spleen', 'splenic',
                                       'gastro', 'gastric', 'duoden', 'jejun', 'ileum', 'ileal',
                                       'colon', 'sigmoid', 'rectum', 'rectal', 'anus', ' anal ',
-                                      'uterus', 'uterine', 'ovary', 'ovarian', 'adnex', 'cervix', 'vagina']}
+                                      'uterus', 'uterine', 'ovary', 'ovarian', 'adnex', 'cervix', 'vagina', 'cervical ca']}
 blacklist = ['Letter to the Editor', 'Erratum for: ']
 
 
@@ -86,14 +86,16 @@ def send_entry_to_telegram_users(entry):
                 print('Failed keyword test {} for {}: {}.'.format(whitelist, person['name'], entry['title']))
 
 def message_passes_whitelist(whitelist_category: str, message: str) -> bool:
+    message = message.lower()
     for keyword in whitelists_by_category[whitelist_category]:
-        if keyword in message:
+        if keyword.lower() in message:
             return True
     return False
 
 def message_passes_blacklist(message: str) -> bool:
+    message = message.lower()
     for keyword in blacklist:
-        if keyword in message:
+        if keyword.lower() in message:
             return False
     return True
 
