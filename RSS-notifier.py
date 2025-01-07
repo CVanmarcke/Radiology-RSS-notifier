@@ -27,7 +27,7 @@ whitelists_by_category = {'uro': ['urogenital' 'genitourina', 'urinary'
                                       'gastro', 'gastric', 'duoden', 'jejun', 'ileum', 'ileal',
                                       'colon', 'sigmoid', 'rectum', 'rectal', 'anus', ' anal ',
                                       'uterus', 'uterine', 'ovary', 'ovarian', 'adnex', 'cervix', 'vagina', 'cervical ca']}
-blacklist = ['Letter to the Editor', 'Erratum for: ']
+globalblacklist = ['Letter to the Editor', 'Erratum for: ']
 
 
 # Retrieves RSS list, and sends new ones to phone
@@ -76,7 +76,7 @@ def send_entry_to_telegram_users(entry):
     for person in receivers:
         for whitelist in person['whitelists']:
             if message_passes_whitelist(whitelist, message):
-                if message_passes_blacklist(message):
+                if message_passes_blacklist(person['blacklist'], message):
                     send_message_to_telegram(message, person['telegramChatID'])
                     print('Sent entry: {}'.format(entry['title']))
                     break # break out of innermost loop only, so it is send only once!
@@ -92,7 +92,7 @@ def message_passes_whitelist(whitelist_category: str, message: str) -> bool:
             return True
     return False
 
-def message_passes_blacklist(message: str) -> bool:
+def message_passes_blacklist(blacklist: list[str], message: str) -> bool:
     message = message.lower()
     for keyword in blacklist:
         if keyword.lower() in message:
@@ -161,11 +161,12 @@ def load_config(configfile = 'config.ini'):
     for receiver in config:
         if receiver != 'DEFAULT':
             receivers.append({'name': receiver,
-                             'telegramChatID': int(config[receiver]['telegramChatID']),
-                             'whitelists': format_whitelist_from_config(config[receiver]['whitelists'])})
+                              'telegramChatID': int(config[receiver]['telegramChatID']),
+                              'whitelists': format_list_from_config(config[receiver]['whitelists']),
+                              'blacklist': format_list_from_config(config[receiver].get('blacklist', '')) + globalblacklist})
 
-def format_whitelist_from_config(whitelistString: str) -> list[str]:
-    return whitelistString.lower().replace(' ', '').split(',')
+def format_list_from_config(liststring: str) -> list[str]:
+    return liststring.lower().replace(' ', '').split(',')
 
 if __name__ == "__main__":
     feedLastUpdatedJsonPath = os.path.join(os.path.dirname(__file__), 'RSS-notifier-last-updated.json')
