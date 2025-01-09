@@ -166,7 +166,7 @@ def load_config(configfile = 'config.ini'):
                               'blacklist': format_list_from_config(config[receiver].get('blacklist', '')) + globalblacklist})
 
 def format_list_from_config(liststring: str) -> list[str]:
-    return liststring.lower().replace(' ', '').split(',')
+    return [w.strip() for w in liststring.lower().split(',')]
 
 if __name__ == "__main__":
     feedLastUpdatedJsonPath = os.path.join(os.path.dirname(__file__), 'RSS-notifier-last-updated.json')
