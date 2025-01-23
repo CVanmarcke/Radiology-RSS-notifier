@@ -27,13 +27,14 @@ A small python script (meant for personal use) which checks for new articles in 
   [user2]
   telegramChatID = CHAT ID HERE
   whitelists = uro
+  blacklist = radiomic
 #+end_src
 
 3. Run with =python RSS-notifier-server.py= or =python3 RSS-notifier-server.py=
 4. The first run will not send articles, only subsequent runs will compare the new articles to previously retrieved articles and send the new entries through Telegram to the users as defined in =config.ini=.
 
 ** Supported whitelists
-Currently only =uro= and =abdomen= whitelists are supported.
+Currently only =uro= and =abdomen= whitelists are supported. More can easily be added by editing the python file.
 
 ** Monitored journals
 - Insights into imaging
@@ -41,3 +42,6 @@ Currently only =uro= and =abdomen= whitelists are supported.
 - Radiographics
 - AJR
 - European radiology
+
+** Blacklisting
+Keywords can be added to the =blacklist= item to exclude articles which contain them.
