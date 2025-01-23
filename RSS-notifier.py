@@ -7,11 +7,22 @@ import re
 import configparser
 
 feedLastUpdatedJsonPath = 'RSS-notifier-last-updated.json'
-RSSlist = ['https://pubmed.ncbi.nlm.nih.gov/rss/journals/101532453/?limit=10&name=Insights%20Imaging&utm_campaign=journals',
-           'https://pubmed.ncbi.nlm.nih.gov/rss/journals/101674571/?limit=10&name=Abdom%20Radiol%20%28NY%29&utm_campaign=journals',
+RSSlist = ['https://pubmed.ncbi.nlm.nih.gov/rss/journals/101532453/?limit=15&name=Insights%20Imaging&utm_campaign=journals',
+           'https://pubmed.ncbi.nlm.nih.gov/rss/journals/101674571/?limit=15&name=Abdom%20Radiol%20%28NY%29&utm_campaign=journals',
            'https://pubmed.ncbi.nlm.nih.gov/rss/journals/8302501/?limit=20&name=Radiographics&utm_campaign=journals',
            'https://pubmed.ncbi.nlm.nih.gov/rss/journals/7708173/?limit=15&name=AJR%20Am%20J%20Roentgenol&utm_campaign=journals',
-           'https://pubmed.ncbi.nlm.nih.gov/rss/journals/9114774/?limit=10&name=Eur%20Radiol&utm_campaign=journals']
+           'https://pubmed.ncbi.nlm.nih.gov/rss/journals/9114774/?limit=15&name=Eur%20Radiol&utm_campaign=journals',
+           'https://pubmed.ncbi.nlm.nih.gov/rss/journals/0401260/?limit=50&name=Radiology&utm_campaign=journals',
+           'https://pubmed.ncbi.nlm.nih.gov/rss/journals/101765309/?limit=50&name=Radiol%20Imaging%20Cancer&utm_campaign=journals',
+           'https://pubmed.ncbi.nlm.nih.gov/rss/journals/8106411/?limit=10&name=Eur%20J%20Radiol&utm_campaign=journals',
+           'https://pubmed.ncbi.nlm.nih.gov/rss/journals/100956096/?limit=20&name=Korean%20J%20Radiol&utm_campaign=journals',
+           'https://pubmed.ncbi.nlm.nih.gov/rss/journals/101490689/?limit=10&name=Jpn%20J%20Radiol&utm_campaign=journals',
+           'https://pubmed.ncbi.nlm.nih.gov/rss/journals/8911831/?limit=10&name=Clin%20Imaging&utm_campaign=journals',
+           'https://pubmed.ncbi.nlm.nih.gov/rss/journals/1306016/?limit=10&name=Clin%20Radiol&utm_campaign=journals',
+           # -	Journal of Gastrointestinal and Abdominal Radiology niet gevonden.
+           'https://pubmed.ncbi.nlm.nih.gov/rss/journals/101698198/?limit=10&name=J%20Belg%20Soc%20Radiol&utm_campaign=journals',
+           'https://pubmed.ncbi.nlm.nih.gov/rss/journals/8706123/?limit=10&name=Acta%20Radiol&utm_campaign=journals'
+           ]
 # Telegram BOT Token
 telegramBotToken = ''
 

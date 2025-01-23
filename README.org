@@ -42,6 +42,15 @@ Currently only =uro= and =abdomen= whitelists are supported. More can easily be 
 - Radiographics
 - AJR
 - European radiology
+- Radiology
+- Radiology: Imaging Cancer
+- European Journal of Radiology
+- Korean Journal of Radiology
+- Japanese Journal of Radiology
+- Clinical Imaging
+- Clinical Radiology
+- Journal of the Belgian Society of Radiology
+- Acta Radiologica
 
 ** Blacklisting
 Keywords can be added to the =blacklist= item to exclude articles which contain them.
